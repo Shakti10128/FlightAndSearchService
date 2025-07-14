@@ -8,7 +8,7 @@ const setupAndStartServer = async()=>{
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:true}));
 
-    app.listen(PORT,(err)=>{
+    app.listen(PORT,async(err)=>{
         if(err) {
             console.log("Error occured while setup the server");
             console.error("Server connection Error", err.message);
