@@ -1,8 +1,8 @@
 # Welcome to Flight Service
 
 ## Project Setup
-- clone the project on your machine
-- execute the command `npm init` on the same path of the root directory of the downlaoded folder
+- Clone the project on your machine
+- Cxecute the command `npm init` on the same path of the root directory of the downlaoded folder
 - create a `.env` file in the root directory and add the following enviroment variables
     - `PORT=3000`
 
@@ -21,3 +21,5 @@
 }
 
 ```
+
+- Once you've added your db config as listed above, go to the src folder from you terminal and execute `npx sequelze db:create` 
