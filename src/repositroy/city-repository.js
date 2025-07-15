@@ -28,11 +28,17 @@ class cityRepository {
 
     async updateCity(cityId,data){
         try {
-            const city = await City.update(data,{
-                where:{
-                    id: cityId
-                }
-            });
+            // const city = await City.update(data,{
+            //     where:{
+            //         id: cityId
+            //     },
+            //     // now the updated data will be return also, but it supported in
+            //     // PostgresSql only
+            //     returning:true
+            // });
+            const city = await City.findByPk(cityId);
+            city.name = data.name;
+            await city.save();
             return city;
         } catch (error) {
             console.log("Error while updating the city in cityRepository layer");
@@ -43,7 +49,17 @@ class cityRepository {
     async getCity(cityId){
         try {
             // find the city by PrimaryKey as cityid is Primary Key
-            const city = await City.findByPK(cityId);
+            const city = await City.findByPk(cityId);
+            return city;
+        } catch (error) {
+            console.log("Error while geting the city in cityRepository layer");
+            throw {error};
+        }
+    }
+    async getAllCities(cityId){
+        try {
+            // find the city by PrimaryKey as cityid is Primary Key
+            const city = await City.findAll(cityId);
             return city;
         } catch (error) {
             console.log("Error while geting the city in cityRepository layer");

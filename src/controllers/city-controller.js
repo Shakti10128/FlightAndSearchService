@@ -34,10 +34,10 @@ const destroy = async(req,res)=>{
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            data: response,
+            data: {},
             success:true,
             message:"Not able to delete city",
-            err:{}
+            err:error
         })
     }
 }
@@ -55,10 +55,10 @@ const update = async(req,res)=>{
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            data: response,
+            data: {},
             success:true,
             message:"Not able to update city",
-            err:{}
+            err:error
         })
     }
 }
@@ -76,10 +76,30 @@ const get = async(req,res)=>{
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            data: response,
+            data: {},
             success:true,
             message:"Not able to get city",
+            err:error
+        })
+    }
+}
+
+const getAllCities = async(req,res)=>{
+    try {
+        const response = await cityService.getAllCities();
+        return res.status(200).json({
+            data: response,
+            success:true,
+            message:"All cities fetched successfully",
             err:{}
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            data: {},
+            success:true,
+            message:"Not able to fetched all city",
+            err:error
         })
     }
 }
@@ -88,5 +108,6 @@ module.exports = {
     create,
     destroy,
     update,
-    get
+    get,
+    getAllCities
 }
