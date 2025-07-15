@@ -19,6 +19,7 @@ class cityRepository {
                     id: cityId
                 }
             })
+            return true;
         } catch (error) {
             console.log("Error while deleting the city in cityRepository layer");
             throw {error};
