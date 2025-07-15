@@ -23,9 +23,7 @@
 ```
 
 - Once you've added your db config as listed above, go to the src folder from you terminal and execute `npx sequelze db:create` 
-and then execute 
-
-`npx sequelize db:migrate`
+and then execute `npx sequelize db:migrate`
 
 ## DB Design
  - Airplane Table
