@@ -1,4 +1,4 @@
-const { where } = require("sequelize");
+const { where,Op } = require("sequelize");
 const {City} = require("../models/index");
 
 class cityRepository {
@@ -56,10 +56,20 @@ class cityRepository {
             throw {error};
         }
     }
-    async getAllCities(cityId){
+    async getAllCities(filter){
         try {
+            if(filter.name) {
+                const cities = City.findAll({
+                    where:{
+                        name:{
+                            [Op.startsWith]:filter.name
+                        }
+                    }
+                })
+                return cities;
+            }
             // find the city by PrimaryKey as cityid is Primary Key
-            const city = await City.findAll(cityId);
+            const city = await City.findAll();
             return city;
         } catch (error) {
             console.log("Error while geting the city in cityRepository layer");
