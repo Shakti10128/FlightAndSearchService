@@ -1,8 +1,15 @@
 const {Flights} = require("../models/index");
 const {Op, where} = require("sequelize");
+const AppError = require("../utils/error-handler")
+const {StatusCodes} = require("http-status-codes");
+const CrudRepository = require("./crud-repository")
 
 
-class FlightRepository{
+class FlightRepository extends CrudRepository{
+
+    constructor(){
+        super(Flights);
+    }
 
     // private method
     #createFilter(data){
@@ -29,36 +36,19 @@ class FlightRepository{
     }
 
     async createFlight(data) {
-        try {
-            const flight = await Flights.create(data);
-            return flight;
-        } catch (error) {
-            console.log("Error while creating the flight in the flight repository layer");
-            throw {error}
-        }
+        return await super.create(data);
     }
-
+    
     async getFlight(id) {
-        try {
-            const flight = await Flights.findByFk(id);
-            return flight;
-        } catch (error) {
-            console.log("Error while getting the flight data in the flight repository layer");
-            throw {error}
-        }
+        return await super.get(id);
     }
 
     async getAllFlight(filter) {
-        try {
-            const filterObject = this.#createFilter(filter);
-            const flights = await Flights.findAll({
-                where:filterObject
-            });
-            return flights;
-        } catch (error) {
-            console.log("Error while getting all the flight in the flight repository layer");
-            throw {error}
-        }
+        const filterObject = this.#createFilter(filter);
+        const flights = await Flights.findAll({
+            where:filterObject
+        });
+        return flights;
     }
 };
 

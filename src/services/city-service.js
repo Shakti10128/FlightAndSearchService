@@ -1,5 +1,6 @@
 const {CityRepository} = require("../repositroy/index");
-
+const AppError = require("../utils/error-handler");
+const {StatusCodes} = require("http-status-codes")
 
 class CityService{
     constructor(){
@@ -11,38 +12,42 @@ class CityService{
             const response = await this.cityRepository.createCity(data);
             return response;
         } catch (error) {
-            console.log("Error while creating the city in cityService layer");
-            throw {error};
+            throw error;
         }
     };
 
     async deleteCity(cityId) {
         try {
+            await this.getCity(cityId); // if city present won't throw any else
+
             const response = await this.cityRepository.deleteCity(cityId);
             return response;
         } catch (error) {
-            console.log("Error while deleting the city in cityService layer");
-            throw {error};
+            throw error;
         }
     };
 
     async updateCity(cityId,data){
         try {
+            await this.getCity(cityId); // if city present won't throw any else
+
             const response = await this.cityRepository.updateCity(cityId,data);
             return response;
         } catch (error) {
-            console.log("Error while updating the city in cityService layer");
-            throw {error};
+            throw error;
         }
     };
 
     async getCity(cityId){
         try {
-            const response = await this.cityRepository.getCity(cityId);
-            return response;
+            const city = await this.cityRepository.getCity(cityId);
+            if(!city) {
+                console.log("city not present")
+                throw new AppError("Invalid cityId", StatusCodes.BAD_REQUEST);
+            }
+            return city;
         } catch (error) {
-            console.log("Error while geting the city in cityService layer");
-            throw {error};
+            throw error;
         }
     }
 
@@ -51,8 +56,7 @@ class CityService{
             const response = await this.cityRepository.getAllCities(filter);
             return response;
         } catch (error) {
-            console.log("Error while geting all the city in cityService layer");
-            throw {error};
+            throw error;
         }
     }
 }

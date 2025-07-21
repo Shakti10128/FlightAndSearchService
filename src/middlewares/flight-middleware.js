@@ -1,4 +1,5 @@
-
+const {StatusCodes} = require("http-status-codes");
+const AppError = require("../utils/error-handler");
 
 const validateCreateFlight = (req,res,next)=>{
     const requiredFields = [ // required fields to create the flight
@@ -13,12 +14,8 @@ const validateCreateFlight = (req,res,next)=>{
 
     for (const field of requiredFields) {
         if (!req.body[field]) {
-            return res.status(400).json({
-                success:false,
-                message:`Required field ${field} is missing`,
-                data:{},
-                err: "Invalid req body for creating the flight"
-            });
+            const error = new AppError(`Required field ${field} is missing`,StatusCodes.BAD_REQUEST,"Invalid req body for creating the flight");
+            next(error);
         }
     }
     next(); //calling the next middleware if any

@@ -1,25 +1,21 @@
+const { StatusCodes } = require("http-status-codes");
 const {AirportService} = require("../services/index");
+const successResponse = require("../utils/successResponse");    
 
 
 const airportService = new AirportService();
 
-const create = async(req,res)=>{
+const create = async(req,res,next)=>{
     try {
-        const response = await airportService.create(req.body);
-        return res.status(201).json({
-            data: response,
-            success:false,
-            message:"Airport created successfully",
-            err: {}
-        })
+        const airportDataBody = {
+            "name":req.body.name,
+            "cityId":req.body.cityId
+        }
+        const response = await airportService.create(airportDataBody);
+        return successResponse(res,StatusCodes.CREATED,response,"Airport created successfully");
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            data: {},
-            success:false,
-            message:"Failded to created Airport",
-            err: error
-        })
+        next(error);
     }
 }
 

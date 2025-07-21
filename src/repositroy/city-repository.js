@@ -1,80 +1,47 @@
 const { where,Op } = require("sequelize");
 const {City} = require("../models/index");
+const CrudRepository = require("./crud-repository");
 
-class CityRepository {
-    async createCity({name}) { // {name:"New Delhi"}
-        try {
-            const city = await City.create({name});
-            return city;
-        } catch (error) {
-            console.log("Error while creating the city in cityRepository layer");
-            throw {error};
-        }
+class CityRepository extends CrudRepository {
+    
+    constructor(){
+         // pass the model that curr repo using so that it parent repo can also operate on the 
+         //  same model
+        super(City);
+    }
+
+    async createCity(data) { 
+        await super.create(data); // calling parent create model to create the city
     };
 
     async deleteCity(cityId) {
-        try {
-            await City.destroy({
-                where:{
-                    id: cityId
-                }
-            })
-            return true;
-        } catch (error) {
-            console.log("Error while deleting the city in cityRepository layer");
-            throw {error};
-        }
+        await super.destroy(cityId);
     };
 
     async updateCity(cityId,data){
-        try {
-            // const city = await City.update(data,{
-            //     where:{
-            //         id: cityId
-            //     },
-            //     // now the updated data will be return also, but it supported in
-            //     // PostgresSql only
-            //     returning:true
-            // });
-            const city = await City.findByPk(cityId);
-            city.name = data.name;
-            await city.save();
-            return city;
-        } catch (error) {
-            console.log("Error while updating the city in cityRepository layer");
-            throw {error};
-        }
+        await super.update(cityId,data);
     };
 
     async getCity(cityId){
-        try {
-            // find the city by PrimaryKey as cityid is Primary Key
-            const city = await City.findByPk(cityId);
-            return city;
-        } catch (error) {
-            console.log("Error while geting the city in cityRepository layer");
-            throw {error};
-        }
+        // find the city by PrimaryKey as cityid is Primary Key
+        const city = await super.get(cityId);
+        return city ? city : null;
     }
+
     async getAllCities(filter){
-        try {
-            if(filter.name) {
-                const cities = City.findAll({
-                    where:{
-                        name:{
-                            [Op.startsWith]:filter.name
-                        }
+        if(filter.name) {
+            const cities = City.findAll({
+                where:{
+                    name:{
+                        [Op.startsWith]:filter.name
                     }
-                })
-                return cities;
-            }
-            // find the city by PrimaryKey as cityid is Primary Key
-            const city = await City.findAll();
-            return city;
-        } catch (error) {
-            console.log("Error while geting the city in cityRepository layer");
-            throw {error};
+                }
+            })
+            return cities;
         }
+        // find all cities if there is no filter
+        const city = await City.findAll();
+        return city;
     }
 }
 

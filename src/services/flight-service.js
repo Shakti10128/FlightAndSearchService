@@ -1,5 +1,7 @@
 const {FlightRepository,AirplaneRepostory} = require("../repositroy/index");
 const {validateDateAndTimeOfFlight} = require("../utils/helper");
+const AppError = require("../utils/error-handler")
+const {StatusCodes} = require("http-status-codes");
 
 class FlightService{
 
@@ -12,16 +14,17 @@ class FlightService{
         try {
             // vliadation for flight arrivalTime & departureTime
             if(!validateDateAndTimeOfFlight(data.arrivalTime,data.departureTime)) {
-                throw {error: "arrivalTime and departureTime are invalid"};
-            }
+                throw new AppError("arrivalTime and departureTime are invalid",StatusCodes.BAD_REQUEST)
+            } 
+
+            // get the airplane details, like we concern about capacity for a flight right now
             const airplane = await this.airplaneRepostory.getAirplane(data.airplaneId);
             
             const flight = await this.flightRepository.createFlight({...data,totalSeats:airplane.capacity});
 
             return flight;
         } catch (error) {
-            console.log("Error while creating the flight in the flight service layer");
-            throw {error}
+            throw error;
         }
     }
 
@@ -30,8 +33,7 @@ class FlightService{
             const flight = await this.flightRepository.getAllFlight(data);
             return flight;
         } catch (error) {
-            console.log("Error while getting all the flight in the flight service layer");
-            throw {error}
+            throw error;
         }
     }
 }

@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ApiRoutes = require("./routes/index");
 const {PORT} = require("./config/serverConfig");
+const errorHandler = require("./middlewares/errorHandler");
 
 const setupAndStartServer = async()=>{ 
     const app = express();
@@ -11,6 +12,9 @@ const setupAndStartServer = async()=>{
     app.use(bodyParser.urlencoded({extended:true}));
 
     app.use("/api",ApiRoutes);
+
+    // Global error handler — must be last
+    app.use(errorHandler);
 
     app.listen(PORT,async(err)=>{
         if(err) {

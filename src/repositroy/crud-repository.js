@@ -5,61 +5,36 @@ class CrudRepository{
     }
 
     async create(data){
-        try {
-            const result = await this.model.create(data);
-            return result; 
-        } catch (error) {
-            console.log("Something went wrong in CRUD Repository");
-            throw {error}
-        }
+        const result = await this.model.create(data);
+        return result; 
     }
 
     async destroy(modelId){
-        try {
-            await this.model.destroy({
-                where:{
-                    id: modelId
-                }
-            });
-            return true;
-        } catch (error) {
-            console.log("Something went wrong in CRUD Repository");
-            throw {error}
-        }
+        await this.model.destroy({
+            where:{
+                id: modelId
+            }
+        });
+        return true;
     }
 
     async get(modelId){
-        try {
-            const result = await this.model.findByPk(modelId);
-            return result;
-        } catch (error) {
-            console.log("Something went wrong in CRUD Repository");
-            throw {error}
-        }
+        const result = await this.model.findByPk(modelId);
+        return result;
     }
 
     async getAll(){
-        try {
-            const result = await this.model.findAll();
-            return result;
-        } catch (error) {
-            console.log("Something went wrong in CRUD Repository");
-            throw {error}
-        }
+        const result = await this.model.findAll();
+        return result;
     }
 
     async update(modelId,data){
-        try {
-            const result = await this.model.update(data,{
-                where: {
-                    id: modelId
-                }
-            });
-            return result;
-        } catch (error) {
-            console.log("Something went wrong in CRUD Repository");
-            throw {error}
-        }
+        const result = await this.model.update(data,{
+            where: {
+                id: modelId
+            }
+        });
+        return result;
     }
 }
 
