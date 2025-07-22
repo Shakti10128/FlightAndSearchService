@@ -16,6 +16,16 @@ const create = async(req,res,next)=>{
     }
 }
 
+const getFlightById = async(req,res,next)=>{
+    try {
+        console.log("controller ",req.params.id);
+        const flight = await flightService.getFlightById(req.params.id);
+        return successResponse(res,StatusCodes.OK,flight,"Flight fetched successfully");
+    } catch (error) {
+        next(error);
+    }
+}
+
 const getAllFlight = async(req,res,next)=>{
     try {
         const response = await flightService.getAllFlightData(req.query);
@@ -27,5 +37,6 @@ const getAllFlight = async(req,res,next)=>{
 
 module.exports = {
     create,
+    getFlightById,
     getAllFlight
 }

@@ -2,6 +2,7 @@ const {FlightRepository,AirplaneRepostory} = require("../repositroy/index");
 const {validateDateAndTimeOfFlight} = require("../utils/helper");
 const AppError = require("../utils/error-handler")
 const {StatusCodes} = require("http-status-codes");
+const successResponse = require("../utils/successResponse");
 
 class FlightService{
 
@@ -22,6 +23,18 @@ class FlightService{
             
             const flight = await this.flightRepository.createFlight({...data,totalSeats:airplane.capacity});
 
+            return flight;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getFlightById(id){
+        try {
+            const flight = await this.flightRepository.getFlightById(id);
+            if(!flight) {
+                throw new AppError("Invalid flight id",StatusCodes.BAD_REQUEST);
+            }
             return flight;
         } catch (error) {
             throw error;
