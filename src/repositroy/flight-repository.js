@@ -40,7 +40,6 @@ class FlightRepository extends CrudRepository{
     }
     
     async getFlightById(id) {
-        console.log("repository ",id);
         return await super.get(id);
     }
 

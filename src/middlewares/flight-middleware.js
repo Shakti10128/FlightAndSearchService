@@ -1,18 +1,19 @@
 const {StatusCodes} = require("http-status-codes");
 const AppError = require("../utils/error-handler");
 
-const validateCreateFlight = (req,res,next)=>{
-    const requiredFields = [ // required fields to create the flight
-        "flightNumber",
-        "airplaneId",
-        "arrivalAirportId",
-        "departureAirportId",
-        "arrivalTime",
-        "departureTime",
-        "price"
-    ];
 
-    for (const field of requiredFields) {
+const flightRequiredFields = [ // required fields to create the flight
+    "flightNumber",
+    "airplaneId",
+    "arrivalAirportId",
+    "departureAirportId",
+    "arrivalTime",
+    "departureTime",
+    "price"
+];
+const validateCreateFlight = (req,res,next)=>{
+    
+    for (const field of flightRequiredFields) {
         if (!req.body[field]) {
             const error = new AppError(`Required field ${field} is missing`,StatusCodes.BAD_REQUEST,"Invalid req body for creating the flight");
             next(error);
@@ -22,5 +23,6 @@ const validateCreateFlight = (req,res,next)=>{
 }
 
 module.exports = {
-    validateCreateFlight
+    validateCreateFlight,
+    flightRequiredFields
 }

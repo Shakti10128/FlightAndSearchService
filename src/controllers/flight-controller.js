@@ -18,9 +18,18 @@ const create = async(req,res,next)=>{
 
 const getFlightById = async(req,res,next)=>{
     try {
-        console.log("controller ",req.params.id);
         const flight = await flightService.getFlightById(req.params.id);
         return successResponse(res,StatusCodes.OK,flight,"Flight fetched successfully");
+    } catch (error) {
+        next(error);
+    }
+}
+
+const updateFlight = async(req,res,next)=>{
+    try {
+        const {flightId,data} = flightData.getUpdateFlightData(req);
+        const response = await flightService.updateFlight(flightId,data);
+        return successResponse(res,StatusCodes.CREATED,response,"Flight Booked successfully");
     } catch (error) {
         next(error);
     }
@@ -38,5 +47,6 @@ const getAllFlight = async(req,res,next)=>{
 module.exports = {
     create,
     getFlightById,
-    getAllFlight
+    getAllFlight,
+    updateFlight
 }

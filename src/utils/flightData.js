@@ -1,4 +1,5 @@
 
+const {flightRequiredFields} = require('../middlewares/flight-middleware');
 
 const getCreateFlightData = (req)=>{
     const flightData = { // required fields to create the flight
@@ -13,6 +14,21 @@ const getCreateFlightData = (req)=>{
     return flightData;
 }
 
+const getUpdateFlightData = (req) => {
+    const flightId = req.params.id;
+    const allowedFields = [...flightRequiredFields, "totalSeats", "boardingGate"];
+    const data = {};
+
+    for (const field of allowedFields) {
+        if (req.body.hasOwnProperty(field)) {
+            data[field] = req.body[field];
+        }
+    }
+    return { flightId, data };
+};
+
+
 module.exports = {
-    getCreateFlightData
+    getCreateFlightData,
+    getUpdateFlightData
 }
