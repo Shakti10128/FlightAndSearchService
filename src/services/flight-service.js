@@ -43,6 +43,7 @@ class FlightService{
 
     async updateFlight(flightId,data){
         try {
+            await this.getFlightById(flightId); //if flight exist won't throw any error else it will
             const response = await this.flightRepository.update(flightId,data);
             return response;
         } catch (error) {
